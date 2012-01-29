@@ -1,0 +1,6 @@
+# git ignore file
+bin/
+obj/
+Debug
+*.suo
+*.nupkg
