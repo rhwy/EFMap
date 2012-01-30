@@ -137,7 +137,7 @@ For exemple, let's add a default idea with a comment to show users after the ins
 
 ### Finish defining your context
 
-You just have to define now your context with your DbSets. The interesting option now is the auto load. Define your sets available to your context, then, when defining autoload, it will search for each set of your context for a mapping. That's a cleaner way than handling everything in the "onModelBinding" method don't you think?
+You just have to define now your context with your DbSets. The interesting option now is the auto load. Define your sets available to your context, then, when defining autoload, it will search for each set of your context for a mapping. That's a cleaner way than handling everything in the "onModelcreating" method don't you think?
 
 	    public class IdeaContext : DbContext
         {
