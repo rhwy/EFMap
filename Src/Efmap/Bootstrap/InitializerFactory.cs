@@ -29,14 +29,25 @@ namespace Efmap.Bootstrap
             _entityInitializers.Add(typeof(T), entityInitializer);
         }
 
-        public static DbInitializer GetDbInitializerFor<T>()
+        public static DbInitializer GetDbInitializerFor<T>() where T : DbContext
         {
-            if (_dbInitializers.ContainsKey(typeof(T)))
+            return GetDbInitializerFor(typeof(T));
+        }
+
+        public static DbInitializer GetDbInitializerFor(Type dbContextType)
+        {
+            if(!dbContextType.IsAssignableFrom(typeof(DbContext)))
             {
-                return _dbInitializers[typeof(T)];
+                return null;
+            }
+
+            if (_dbInitializers.ContainsKey(dbContextType))
+            {
+                return _dbInitializers[dbContextType];
             }
             return new DbInitializer();
         }
+
         public static EntityInitializer<T> GetEntityInitializerFor<T>() where T:DbContext
         {
             if (_entityInitializers.ContainsKey(typeof(T)))
@@ -46,5 +57,13 @@ namespace Efmap.Bootstrap
             return new EntityInitializer<T>();
         }
 
+        public static EntityInitializer GetEntityInitializerFor(Type dbContextType)
+        {
+            if (_entityInitializers.ContainsKey(dbContextType))
+            {
+                return _entityInitializers[dbContextType] as EntityInitializer;
+            }
+            return Activator.CreateInstance(dbContextType) as EntityInitializer;
+        }
     }
 }

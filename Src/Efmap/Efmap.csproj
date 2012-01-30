@@ -45,6 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\Common\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Bootstrap\DbInitializer.cs" />
     <Compile Include="Bootstrap\DropCreateAlways.cs" />
     <Compile Include="Bootstrap\DropCreateOnModelChanges.cs" />

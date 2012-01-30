@@ -9,6 +9,10 @@ using System.Data.Entity;
 using System.Reflection;
 using System.Data.Entity.ModelConfiguration;
 using System.Data.Entity.ModelConfiguration.Configuration;
+using System.Data.Entity.Infrastructure;
+using Efmap.Bootstrap;
+using System.IO;
+using System.Xml;
 
 namespace Efmap.Helpers
 {
@@ -25,6 +29,7 @@ namespace Efmap.Helpers
         {
             BulkInsert<T>(context.Database.Connection.ConnectionString, table, data);
         }
+
 
         /// <summary>
         /// allows bulk insert directly onto a specific table
@@ -70,6 +75,12 @@ namespace Efmap.Helpers
             }
         }
 
+        /// <summary>
+        /// call this from your OnModelCreating in your DbContext, it will load every map you 
+        /// define for the entities you have in the DbSets attached to this DbContext
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="modelBuilder"></param>
         public static void AutoLoadForThisContext(this DbContext context, DbModelBuilder modelBuilder)
         {
             Type tc = context.GetType();
@@ -103,6 +114,38 @@ namespace Efmap.Helpers
                 }
 
             }
+        }
+
+
+        public static string GetSqlCreationScript(this DbContext context)
+        {
+            string entitySqlScript = ((IObjectContextAdapter)context).ObjectContext.CreateDatabaseScript();
+
+            StringBuilder sb = new StringBuilder(entitySqlScript+Environment.NewLine);
+
+            DbInitializer dbinit = InitializerFactory.GetDbInitializerFor(context.GetType());
+            SortedSet<string>  customDbCommands = dbinit.GetCommands();
+            foreach (string cmd in customDbCommands)
+            {
+                sb.AppendLine(cmd);
+            }
+            return sb.ToString();
+        }
+
+        public static string GetGeneratedEdmx(this DbContext context)
+        {
+            string result = string.Empty;
+            using (TextWriter writer = new Utf8StringWriter())
+            {
+                XmlWriterSettings settings = new XmlWriterSettings();
+                settings.Indent = true;
+                using (XmlWriter xmlWriter = XmlWriter.Create(writer,settings))
+                {
+                    EdmxWriter.WriteEdmx(context, xmlWriter);
+                }
+                result = writer.ToString();
+            }
+            return result;
         }
     }
 }
