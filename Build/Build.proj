@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Start" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Import Project="$(MSBuildProjectDirectory)\Build.tasks" />
+	<PropertyGroup>
+		<ProjectRootName>Efmap</ProjectRootName>
+		<Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
+		<ProjectRoot>$(MSBuildProjectDirectory)\..</ProjectRoot>
+		<ProjectTest>$(ProjectRoot)\Test</ProjectTest>
+		<ProjectSrc>$(ProjectRoot)\Src</ProjectSrc>
+		<ProjectBin>$(ProjectSrc)\$(ProjectRootName)\bin\$(Configuration)</ProjectBin>
+		<DropDirectory>$(ProjectRoot)\Bins</DropDirectory>
+		<DropDirectoryAllAssemblies>$(DropDirectory)\AllAssemblies</DropDirectoryAllAssemblies>
+		<DropDirectoryMerged>$(DropDirectory)\MergedFramework</DropDirectoryMerged>
+		<DropDirectoryLog>$(DropDirectory)\Log</DropDirectoryLog>
+		<ILMergeExe>$(ProjectRoot)\Tools\ILMerge.exe</ILMergeExe>
+		<NugetExe>$(ProjectRoot)\Tools\nuget.exe</NugetExe>
+		<TargetProjectName>$(ProjectRootName)</TargetProjectName>
+		<NugetManifest>$(ProjectRoot)\$(TargetProjectName).nuspec</NugetManifest>
+		<DotNet4ReferenceAssemblies>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0</DotNet4ReferenceAssemblies>
+		<LegalFileSource>$(ProjectRoot)\Common\legal.txt</LegalFileSource>
+    </PropertyGroup>
+	<PropertyGroup>
+		<MajorVersion>1</MajorVersion>
+		<MinorVersion>0</MinorVersion>
+		<VersionStartYear>2011</VersionStartYear>
+		<BuildNumber>$([MSBuild]::Add(1, $([MSBuild]::Subtract($([System.DateTime]::Now.Year), $(VersionStartYear)))))$([System.DateTime]::Now.ToString("Md"))</BuildNumber>
+		<Revision Condition="'$(Revision)' == ''">$(BuildNumber)</Revision>
+		<Version>$(MajorVersion).$(MinorVersion).$(BuildNumber).$(Revision)</Version>
+	</PropertyGroup>
+    <ItemGroup>
+      <RegexTransform Include="$(ProjectRoot)\Common\CommonAssemblyInfo.cs">
+          <Find>\d+\.\d+\.\d+\.\d+</Find>
+          <ReplaceWith>$(Version)</ReplaceWith>
+      </RegexTransform>
+      <RegexTransform Include="$(NugetManifest)">
+        <Find>\d+\.\d+\.\d+\.\d+</Find>
+        <ReplaceWith>$(Version)</ReplaceWith>
+      </RegexTransform>
+      <LegalInsertTransform Include="$(LegalFileSource)">
+        <LegalSource>$(LegalFileSource)</LegalSource>
+      </LegalInsertTransform>
+    </ItemGroup>
+  
+	  <Target Name="Start" DependsOnTargets="Intro;UpdateCommonVersion;Build;CreateDropDirectories;CopyAllFrameworkAssembliesToDrops;NugetPack">
+    </Target>
+	
+	  <!-- INFO : BUILD ALL Sources -->
+	  <Target Name="Intro">
+		  <Message Text="[Building solution with Version Number $(Version)]" />
+	  </Target>
+  
+	  <Target Name="UpdateCommonVersion" Condition="'$(BuildNumber)' != ''">
+		  <Message Text="Updating Common Assembly info with current build number ($(Version))" />
+      <RegexTransform Items="@(RegexTransform)" />
+    </Target>
+
+    <Target Name="UpdateLegalInfo" Condition="'$(LegalFileSource)' != ''">
+      <Message Text="Updating all cs files with legal information from file $(LegalFileSource)" />
+      <LegalInsertTransform Items="@(LegalInsertTransform)" />
+    </Target>
+  
+	  <Target Name="Build">
+		  <Message Text="Building the Solution." />
+      <MSBuild Projects="$(ProjectRoot)\Efmap.sln" Targets="Build" />
+    </Target>
+	
+	  <!-- INFO : Create,Merge,Copy Resulting binaries -->
+	  <Target Name="CreateDropDirectories">
+          <Message Text="Making the output directories for the compiled output at '$(DropDirectory)'." />
+          <RemoveDir Directories="$(DropDirectory)" Condition="Exists('$(DropDirectory)')" ContinueOnError="True" />
+          <MakeDir Directories="$(DropDirectory)" Condition="!Exists('$(DropDirectory)')" />
+          <MakeDir Directories="$(DropDirectoryAllAssemblies)" Condition="!Exists('$(DropDirectoryAllAssemblies)')" />
+          <MakeDir Directories="$(DropDirectoryMerged)" Condition="!Exists('$(DropDirectoryMerged)')" />
+		  <MakeDir Directories="$(DropDirectoryLog)" Condition="!Exists('$(DropDirectoryLog)')" />
+    </Target>
+	
+	  <Target Name="CopyAllFrameworkAssembliesToDrops">
+          <ItemGroup>
+              <ProjectBinItems Include="$(ProjectBin)\**\*.*" />
+          </ItemGroup>
+          <Message Text="Copying the app output to $(DropDirectoryAllAssemblies)" />
+		  <Copy ContinueOnError="false" SourceFiles="@(ProjectBinItems)" DestinationFiles="@(ProjectBinItems ->'$(DropDirectoryAllAssemblies)\%(RecursiveDir)%(Filename)%(Extension)')" />
+    </Target>
+	
+	
+	
+	  <Target Name="NugetPack">
+		  <ItemGroup>
+			  <compiledPackage Include="$(DropDirectory)\$(TargetProjectName).$(Version).nupkg" />
+		  </ItemGroup>
+		  <Message Text="Preparing a nuget package" />
+		  <Exec Command="&quot;$(NugetExe)&quot; pack &quot;$(NugetManifest)&quot; -o &quot;$(DropDirectory)&quot;" />
+		 
+    </Target>	
+</Project>

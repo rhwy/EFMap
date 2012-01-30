@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Go" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <UsingTask TaskName="RegexTransform" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+        <ParameterGroup>
+          <Items ParameterType="Microsoft.Build.Framework.ITaskItem[]" />
+        </ParameterGroup>
+        <Task>
+          <Using Namespace="System.IO" />
+          <Using Namespace="System.Text.RegularExpressions" />
+          <Using Namespace="Microsoft.Build.Framework" />
+          <Code Type="Fragment" Language="cs">
+          <![CDATA[
+            foreach(ITaskItem item in Items) {
+              string fileName = item.GetMetadata("FullPath");
+              string find = item.GetMetadata("Find");
+              string replaceWith = item.GetMetadata("ReplaceWith");
+              
+              if(!File.Exists(fileName)) {
+                Log.LogError(null, null, null, null, 0, 0, 0, 0, String.Format("Could not find version file: {0}", fileName), new object[0]);
+              }
+              string content = File.ReadAllText(fileName);
+              File.WriteAllText(
+                fileName,
+                Regex.Replace(
+                  content,
+                  find,
+                  replaceWith
+                )
+              );
+            }
+          ]]></Code>
+        </Task>
+      </UsingTask>
+  <UsingTask TaskName="LegalInsertTransform" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+    <ParameterGroup>
+      <Items ParameterType="Microsoft.Build.Framework.ITaskItem[]" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System.IO" />
+      <Using Namespace="System.Collections.Generic" />
+      <using Namespace="System.Linq" />
+      <Using Namespace="Microsoft.Build.Framework" />
+      <Code Type="Fragment" Language="cs">
+        <![CDATA[
+            foreach(ITaskItem item in Items) {
+              string source = item.GetMetadata("FullPath");
+              string replaceWithSource = item.GetMetadata("LegalSource");
+
+              if (!File.Exists(source))
+              {
+                  Log.LogError(null, null, null, null, 0, 0, 0, 0, String.Format("Could not find version file: {0}", source), new object[0]);
+              }
+              string[] content = File.ReadAllLines(source);
+              string[] legal = File.ReadAllLines(replaceWithSource);
+              string legalLine1;
+              string legalLine2;
+
+              if (legal.Length > 0)
+              {
+                  legalLine1 = legal[0];
+                  legalLine2 = legal[legal.Length - 1];
+                
+                    
+                  if (content.Length > 0)
+                  {
+                      IEnumerable<string> removedLegalContent = null;
+                      if (content[0].Equals(legalLine1))
+                      {
+                          int i = 0;
+                          while (!content[i].Equals(legalLine2))
+                          {
+                              i++;
+                          }
+                          removedLegalContent = content.Skip(i+3);
+                      }
+                      else
+                      {
+                          removedLegalContent = content;
+                      }
+                      IEnumerable<string> joinedDocument = legal.Concat(removedLegalContent);
+                      string result = string.Join(Environment.NewLine, joinedDocument.ToArray());
+                      File.WriteAllText(source, result);
+                  }
+                
+              }
+            }
+          ]]>
+      </Code>
+    </Task>
+  </UsingTask>
+  </Project>
