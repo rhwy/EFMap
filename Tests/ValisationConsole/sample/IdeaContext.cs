@@ -53,10 +53,7 @@ namespace ValisationConsole.sample
         public IdeaMap()
             : base()
         {
-            HasKey(k => k.Id);
-            Property(p => p.Id)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity)
-                .IsRequired();
+            this.WithRequiredGeneratedIdentity(p => p.Id);
             Property(p => p.Title)
                 .IsRequired()
                 .HasMaxLength(100);
@@ -93,11 +90,20 @@ namespace ValisationConsole.sample
                     idea.Votes.VoteUp++;
 
                     context.Ideas.Add(idea);
-                    context.SaveChanges();
                 });
         }
     }
 
+    public class IdeaDbInitializer : DbInitializer
+    {
+        public IdeaDbInitializer()
+        {
+            //add constraint to avoid exact duplicate ideas
+            this.AddCommand(
+                "IF NOT ISNULL(OBJECT_ID('Ideas','U'),0)=0 ALTER TABLE Ideas ADD CONSTRAINT UN_Ideass_Title UNIQUE(Title)"
+            );
+        }
+    }
     public class IdeaContext : DbContext
     {
         public DbSet<Comment> Comments { get; set; }

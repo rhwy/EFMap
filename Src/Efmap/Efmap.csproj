@@ -51,7 +51,7 @@
     <Compile Include="Bootstrap\EntityInitializer.cs" />
     <Compile Include="Bootstrap\InitializerFactory.cs" />
     <Compile Include="Constraints\UniqueAttribute.cs" />
-    <Compile Include="EfMap.cs" />
+    <Compile Include="EntityMapHelper.cs" />
     <Compile Include="Fluent\SetInitializerValue.cs" />
     <Compile Include="Helpers\DbContextExtensions.cs" />
     <Compile Include="Helpers\MappingExtensions.cs" />
