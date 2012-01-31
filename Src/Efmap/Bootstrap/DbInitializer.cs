@@ -9,6 +9,7 @@ namespace Efmap.Bootstrap
     public class DbInitializer
     {
         private SortedSet<string> _initializeCommands = new SortedSet<string>();
+
         public SortedSet<string> GetCommands(string separator = "")
         {
             return _initializeCommands;

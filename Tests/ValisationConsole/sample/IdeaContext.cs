@@ -118,6 +118,5 @@ namespace ValisationConsole.sample
             this.AutoLoadForThisContext(modelBuilder);
             base.OnModelCreating(modelBuilder);
         }
-
     }
 }

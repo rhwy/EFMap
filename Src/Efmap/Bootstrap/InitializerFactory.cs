@@ -36,7 +36,8 @@ namespace Efmap.Bootstrap
 
         public static DbInitializer GetDbInitializerFor(Type dbContextType)
         {
-            if(!dbContextType.IsAssignableFrom(typeof(DbContext)))
+            //ensure dbcontexttype is on the base of DbContext
+            if (dbContextType.BaseType != typeof(DbContext))
             {
                 return null;
             }

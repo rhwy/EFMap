@@ -26,7 +26,10 @@ namespace Efmap.Bootstrap
             db.Create();
 
             DbInitializer dbinitializer = InitializerFactory.GetDbInitializerFor<T>();
-            dbinitializer.InitializeDatabase(db);
+            if (dbinitializer != null)
+            {
+                dbinitializer.InitializeDatabase(db);
+            }
 
             Seed(context);
         }

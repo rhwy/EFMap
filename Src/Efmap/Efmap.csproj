@@ -58,6 +58,7 @@
     <Compile Include="Fluent\SetInitializerValue.cs" />
     <Compile Include="Helpers\DbContextExtensions.cs" />
     <Compile Include="Helpers\MappingExtensions.cs" />
+    <Compile Include="Helpers\Utf8StringWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Validation\ValidationHelper.cs" />
     <Compile Include="Validation\ValidationInfo.cs" />
