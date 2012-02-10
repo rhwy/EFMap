@@ -12,7 +12,7 @@ Functionalities:
 *	Helps defining database initialization through default model data
 *	Helps defining an identity column
 *	Add validation helpers (for data anotations)
-*	more to come ...
+*	more to come ... (integrating EF 4.3)
 
 it helps you keeping focused with your data
 

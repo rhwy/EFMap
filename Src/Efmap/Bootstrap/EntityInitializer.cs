@@ -34,7 +34,7 @@ namespace Efmap.Bootstrap
                     command(context);
                 }
             }
-
+            
             context.SaveChanges();
             return context;
         }
