@@ -83,6 +83,12 @@ namespace Efmap.Helpers
         /// <param name="modelBuilder"></param>
         public static void AutoLoadForThisContext(this DbContext context, DbModelBuilder modelBuilder)
         {
+            //verify options for modelbuilder before
+            if (InitializerFactory.IsOptionActivated("RemoveMetaDataStatus"))
+            {
+                modelBuilder.Conventions.Remove<IncludeMetadataConvention>();
+            }
+
             Type tc = context.GetType();
             var props = tc.GetProperties().Where(
                 p => p.PropertyType.IsGenericType

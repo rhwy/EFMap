@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using Efmap;
 using System.Data.Entity;
-using ValisationConsole.sample;
+using Integration.sample;
 using Efmap.Bootstrap;
 using Efmap.Helpers;
 
-namespace ValisationConsole
+namespace Integration
 {
     class Program
     {

@@ -13,6 +13,11 @@ namespace Efmap.Bootstrap
     }
     public class EntityInitializer<T>: EntityInitializer where T : DbContext
     {
+        public EntityInitializer()
+        {
+            //setup default conventions
+            InitializerFactory.SetOption("RemoveMetaDataStatus", true);
+        }
         private SortedList<string, Action<T>> _initializeCommands = new SortedList<string, Action<T>>();
         
         public IEnumerable<string> ListCommands(string separator = "")

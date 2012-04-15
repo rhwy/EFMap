@@ -21,7 +21,7 @@
     </PropertyGroup>
 	<PropertyGroup>
 		<MajorVersion>1</MajorVersion>
-		<MinorVersion>0</MinorVersion>
+		<MinorVersion>1</MinorVersion>
 		<VersionStartYear>2011</VersionStartYear>
 		<BuildNumber>$([MSBuild]::Add(1, $([MSBuild]::Subtract($([System.DateTime]::Now.Year), $(VersionStartYear)))))$([System.DateTime]::Now.ToString("Md"))</BuildNumber>
 		<Revision Condition="'$(Revision)' == ''">$(BuildNumber)</Revision>
@@ -29,14 +29,14 @@
 	</PropertyGroup>
     <ItemGroup>
       <RegexTransform Include="$(ProjectRoot)\Common\CommonAssemblyInfo.cs">
-          <Find>\d+\.\d+\.\d+\.\d+</Find>
-          <ReplaceWith>$(Version)</ReplaceWith>
+          	<Find>\d+\.\d+\.\d+\.\d+</Find>
+        	<ReplaceWith>$(Version)</ReplaceWith>
       </RegexTransform>
       <RegexTransform Include="$(NugetManifest)">
-        <Find>\d+\.\d+\.\d+\.\d+</Find>
-        <ReplaceWith>$(Version)</ReplaceWith>
-      </RegexTransform>
-      <LegalInsertTransform Include="$(LegalFileSource)">
+          	<Find>&gt;\d+\.\d+\.\d+\.\d+&lt;</Find>
+          	<ReplaceWith>&gt;$(Version)&lt;</ReplaceWith>
+       </RegexTransform>
+       <LegalInsertTransform Include="$(LegalFileSource)">
         <LegalSource>$(LegalFileSource)</LegalSource>
       </LegalInsertTransform>
     </ItemGroup>

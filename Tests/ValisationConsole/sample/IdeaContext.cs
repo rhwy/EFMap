@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations;
 using Efmap.Helpers;
 using Efmap.Bootstrap;
 
-namespace ValisationConsole.sample
+namespace Integration.sample
 {
     public class Idea
     {

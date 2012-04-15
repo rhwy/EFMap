@@ -10,6 +10,7 @@ namespace Efmap.Bootstrap
     {
         private static Dictionary<Type, DbInitializer> _dbInitializers = new Dictionary<Type, DbInitializer>();
         private static Dictionary<Type, EntityInitializer> _entityInitializers = new Dictionary<Type, EntityInitializer>();
+        private static Dictionary<string, bool> _optionsActivation = new Dictionary<string, bool>();
 
         public static void SetDbInitializer<T>(DbInitializer dbInitializer ) where T : DbContext
         {
@@ -65,6 +66,28 @@ namespace Efmap.Bootstrap
                 return _entityInitializers[dbContextType] as EntityInitializer;
             }
             return Activator.CreateInstance(dbContextType) as EntityInitializer;
+        }
+
+
+        public static void SetOption(string key, bool status)
+        {
+            if (!_optionsActivation.ContainsKey(key))
+            {
+                _optionsActivation.Add(key, status);
+            }
+            else
+            {
+                _optionsActivation[key] = status;
+            }
+        }
+
+        public static bool IsOptionActivated(string key)
+        {
+            if (!_optionsActivation.ContainsKey(key))
+            {
+                return false;
+            }
+            return _optionsActivation[key];
         }
     }
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Efmap.Fluent;
+﻿using Efmap.Fluent;
 using System.Data.Entity;
 using Efmap.Bootstrap;
 
@@ -24,6 +20,16 @@ namespace Efmap
         public static void SetDbInitializer<T>(DbInitializer dbInitializer ) where T : DbContext
         {
             InitializerFactory.SetDbInitializer<T>(dbInitializer);
+        }
+
+        /// <summary>
+        /// Helper to remove Metadataconventions from modelBuilder, this option is used for code using EF4.2 with EF4.3
+        /// it's activated (and true by default) but you can call it explicitely
+        /// </summary>
+        /// <param name="status"></param>
+        public static void RemoveMetadataConvention(bool status = true)
+        {
+            InitializerFactory.SetOption("RemoveMetaDataStatus", status);
         }
     }
 }

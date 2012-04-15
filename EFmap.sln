@@ -5,7 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Efmap", "Src\Efmap\Efmap.cs
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{392AA29F-4D33-4A87-B382-663B6CF57731}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValisationConsole", "Tests\ValisationConsole\ValisationConsole.csproj", "{B1F0D91F-7BE2-49B7-B020-DA9951B99BBF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationConsole", "Tests\ValisationConsole\IntegrationConsole.csproj", "{B1F0D91F-7BE2-49B7-B020-DA9951B99BBF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{443F949E-2300-4F73-8BD6-65C642A870ED}"
 	ProjectSection(SolutionItems) = preProject
