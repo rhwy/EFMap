@@ -21,9 +21,9 @@
     </PropertyGroup>
 	<PropertyGroup>
 		<MajorVersion>1</MajorVersion>
-		<MinorVersion>1</MinorVersion>
-		<VersionStartYear>2011</VersionStartYear>
-		<BuildNumber>$([MSBuild]::Add(1, $([MSBuild]::Subtract($([System.DateTime]::Now.Year), $(VersionStartYear)))))$([System.DateTime]::Now.ToString("Md"))</BuildNumber>
+		<MinorVersion>2</MinorVersion>
+		<VersionStartYear>2012</VersionStartYear>
+		<BuildNumber>0</BuildNumber>
 		<Revision Condition="'$(Revision)' == ''">$(BuildNumber)</Revision>
 		<Version>$(MajorVersion).$(MinorVersion).$(BuildNumber).$(Revision)</Version>
 	</PropertyGroup>
