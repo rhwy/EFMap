@@ -7,6 +7,7 @@ using System.Data.Entity.ModelConfiguration;
 using System.ComponentModel.DataAnnotations;
 using Efmap.Helpers;
 using Efmap.Bootstrap;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Integration.sample
 {

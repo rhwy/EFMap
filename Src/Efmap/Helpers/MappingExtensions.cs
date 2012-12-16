@@ -5,6 +5,7 @@ using System.Text;
 using System.Data.Entity.ModelConfiguration;
 using System.Linq.Expressions;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Efmap.Helpers
 {

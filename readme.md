@@ -194,7 +194,7 @@ You have now all your need, here is now how you link and use this in your applic
 		  
 ## Foreword          
 		  
-This is not supposed to be revolutionary, but these should help you working better with your EF code first projects by removing some plumbing practices and kept more focused on your business. 
-This is aim to evolve with time, so share your thoughts and contribute with your additions.
-
-Hope it helps ;-)
+Project Updated for EF 5.0
+Due to demand, and because there is no much alternative for this job, I still keep this project updated.
+Please, fill a github issue if you have more needs, fork and so on ;-)
+cheers!

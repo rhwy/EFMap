@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Efmap;
-using System.Data.Entity;
 using Integration.sample;
 using Efmap.Bootstrap;
 using Efmap.Helpers;
 
-namespace Integration
+namespace IntegrationConsole
 {
     class Program
     {
@@ -24,7 +21,7 @@ namespace Integration
             EntityMapHelper.Initialize<IdeaContext>().With<DropCreateAlways<IdeaContext>>();
             
             //that's all, you can now use it and directly get the default data as in the exemple
-            using (IdeaContext context = new IdeaContext())
+            using (var context = new IdeaContext())
             {
                 Console.WriteLine("default ideas : ");
                 context.Ideas.ToList().ForEach(
