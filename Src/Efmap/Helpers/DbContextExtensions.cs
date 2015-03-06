@@ -89,36 +89,16 @@ namespace Efmap.Helpers
                 modelBuilder.Conventions.Remove<IncludeMetadataConvention>();
             }
 
-            Type tc = context.GetType();
-            var props = tc.GetProperties().Where(
-                p => p.PropertyType.IsGenericType
-                    && p.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>)
-
-                ).Select(s => s.PropertyType.GetGenericArguments());
-
             Assembly asm = Assembly.GetAssembly(context.GetType());
-            Type loadType = typeof(EntityTypeConfiguration<>);
+            var props = asm.GetTypes()
+                .Where(type => type.BaseType != null
+                               && type.BaseType.IsGenericType
+                               && type.BaseType.GetGenericTypeDefinition() == typeof (EntityTypeConfiguration<>));
 
             foreach (var dataType in props)
             {
-                Type checkType = loadType.MakeGenericType(dataType);
-                var findType = asm.GetTypes().Where(t => t.BaseType == checkType).FirstOrDefault();
-                if (findType != null)
-                {
-                    var obj = Activator.CreateInstance(findType);
-                    Type registrar = typeof(ConfigurationRegistrar);
-                    MethodInfo[] registrarMethods = registrar.GetMethods()
-                        .Where(m => m.Name == "Add" && (m.GetGenericArguments().Where(p => p.Name == "TEntityType").Count() == 1)).ToArray();
-                    if (registrarMethods.Length == 1)
-                    {
-                        MethodInfo registrarAdd = registrarMethods[0];
-                        MethodInfo genericAdd = registrarAdd.MakeGenericMethod(dataType);
-
-                        var result = genericAdd.Invoke(modelBuilder.Configurations, new[] { obj });
-                    }
-
-                }
-
+                dynamic configurationInstance = Activator.CreateInstance(dataType);
+                modelBuilder.Configurations.Add(configurationInstance);
             }
         }
 
