@@ -1,6 +1,8 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30723.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Efmap", "Src\Efmap\Efmap.csproj", "{EA4C98E2-64AB-4339-BEB1-7D43B66CD2BA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{392AA29F-4D33-4A87-B382-663B6CF57731}"
@@ -10,6 +12,14 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{443F949E-2300-4F73-8BD6-65C642A870ED}"
 	ProjectSection(SolutionItems) = preProject
 		readme.md = readme.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{6EFCEFCD-59F6-44C7-AB01-BD43ABCB5D86}"
+	ProjectSection(SolutionItems) = preProject
+		Build\Build.proj = Build\Build.proj
+		Build.ps1 = Build.ps1
+		Efmap.nuspec = Efmap.nuspec
+		push-package.ps1 = push-package.ps1
 	EndProjectSection
 EndProject
 Global
