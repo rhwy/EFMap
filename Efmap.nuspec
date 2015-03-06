@@ -2,17 +2,17 @@
 <package xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <id>Efmap</id>
-    <version>1.2.0.0</version>
+    <version>1.3.0.0</version>
     <authors>Rui Carvalho</authors>
     <owners>Rui Carvalho</owners>
-    <licenseUrl>http://www.artofnet.com/projects/common/licence.txt</licenseUrl>
+    <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
     <projectUrl>https://github.com/rhwy/efmap</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>EF map provides easy additional helpers to work with Entity Framework Code First and make it more valuable. It allows you to be focused on configuration and mapping in a clean way.</description>
     <summary>EF map provides easy additional helpers to work with Entity Framework Code First and make it more valuable. It allows you to be focused on configuration and mapping in a clean way.</summary>
     <language>en-US</language>
     <dependencies>
-      <dependency  id="EntityFramework" version="5.0.0"  />
+      <dependency  id="EntityFramework" version="6.0.0"  />
     </dependencies>
   </metadata>
   <files>
