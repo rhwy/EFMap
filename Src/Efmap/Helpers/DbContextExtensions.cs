@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Metadata.Edm;
 using System.Linq;
 using System.Text;
 using System.Data.SqlClient;
@@ -8,7 +9,6 @@ using System.ComponentModel;
 using System.Data.Entity;
 using System.Reflection;
 using System.Data.Entity.ModelConfiguration;
-using System.Data.Entity.ModelConfiguration.Configuration;
 using System.Data.Entity.Infrastructure;
 using Efmap.Bootstrap;
 using System.IO;
@@ -51,7 +51,9 @@ namespace Efmap.Helpers
                     //Dirty hack to make sure we only have system data types 
                     //i.e. filter out the relationships/collections
                                            .Cast<PropertyDescriptor>()
-                                           .Where(propertyInfo => propertyInfo.PropertyType.Namespace.Equals("System"))
+                                           .Where(propertyInfo => propertyInfo.PropertyType != null
+                                                && propertyInfo.PropertyType.Namespace !=null 
+                                                && propertyInfo.PropertyType.Namespace.Equals("System"))
                                            .ToArray();
 
                 foreach (var propertyInfo in props)
@@ -83,12 +85,7 @@ namespace Efmap.Helpers
         /// <param name="modelBuilder"></param>
         public static void AutoLoadForThisContext(this DbContext context, DbModelBuilder modelBuilder)
         {
-            //verify options for modelbuilder before
-            if (InitializerFactory.IsOptionActivated("RemoveMetaDataStatus"))
-            {
-                modelBuilder.Conventions.Remove<IncludeMetadataConvention>();
-            }
-
+            
             Assembly asm = Assembly.GetAssembly(context.GetType());
             var props = asm.GetTypes()
                 .Where(type => type.BaseType != null
