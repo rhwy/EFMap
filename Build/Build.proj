@@ -21,7 +21,7 @@
     </PropertyGroup>
 	<PropertyGroup>
 		<MajorVersion>1</MajorVersion>
-		<MinorVersion>2</MinorVersion>
+		<MinorVersion>3</MinorVersion>
 		<VersionStartYear>2012</VersionStartYear>
 		<BuildNumber>0</BuildNumber>
 		<Revision Condition="'$(Revision)' == ''">$(BuildNumber)</Revision>

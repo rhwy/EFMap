@@ -22,3 +22,6 @@ _[Rr]e[Ss]harper.*/
 *.ncrunchsolution
 *.dotCover
 src/_NCrunch_Nancy/
+
+packages/
+Bins/
