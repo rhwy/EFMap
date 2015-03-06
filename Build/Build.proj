@@ -23,7 +23,7 @@
 		<MajorVersion>1</MajorVersion>
 		<MinorVersion>3</MinorVersion>
 		<VersionStartYear>2012</VersionStartYear>
-		<BuildNumber>1</BuildNumber>
+		<BuildNumber>3</BuildNumber>
 		<Revision Condition="'$(Revision)' == ''">$(BuildNumber)</Revision>
 		<Version>$(MajorVersion).$(MinorVersion).$(BuildNumber).$(Revision)</Version>
 	</PropertyGroup>

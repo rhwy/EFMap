@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity.Core.Metadata.Edm;
 using System.Linq;
 using System.Text;
 using System.Data.SqlClient;
@@ -9,6 +8,7 @@ using System.ComponentModel;
 using System.Data.Entity;
 using System.Reflection;
 using System.Data.Entity.ModelConfiguration;
+using System.Data.Entity.ModelConfiguration.Configuration;
 using System.Data.Entity.Infrastructure;
 using Efmap.Bootstrap;
 using System.IO;
@@ -99,6 +99,46 @@ namespace Efmap.Helpers
             }
         }
 
+        public static void AutoLoadForThisContextWithDbSet(this DbContext context, DbModelBuilder modelBuilder)
+        {
+            //verify options for modelbuilder before
+            if (InitializerFactory.IsOptionActivated("RemoveMetaDataStatus"))
+            {
+                modelBuilder.Conventions.Remove<IncludeMetadataConvention>();
+            }
+
+            Type tc = context.GetType();
+            var props = tc.GetProperties().Where(
+                p => p.PropertyType.IsGenericType
+                    && p.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>)
+
+                ).Select(s => s.PropertyType.GetGenericArguments());
+
+            Assembly asm = Assembly.GetAssembly(context.GetType());
+            Type loadType = typeof(EntityTypeConfiguration<>);
+
+            foreach (var dataType in props)
+            {
+                Type checkType = loadType.MakeGenericType(dataType);
+                var findType = asm.GetTypes().Where(t => t.BaseType == checkType).FirstOrDefault();
+                if (findType != null)
+                {
+                    var obj = Activator.CreateInstance(findType);
+                    Type registrar = typeof(ConfigurationRegistrar);
+                    MethodInfo[] registrarMethods = registrar.GetMethods()
+                        .Where(m => m.Name == "Add" && (m.GetGenericArguments().Where(p => p.Name == "TEntityType").Count() == 1)).ToArray();
+                    if (registrarMethods.Length == 1)
+                    {
+                        MethodInfo registrarAdd = registrarMethods[0];
+                        MethodInfo genericAdd = registrarAdd.MakeGenericMethod(dataType);
+
+                        var result = genericAdd.Invoke(modelBuilder.Configurations, new[] { obj });
+                    }
+
+                }
+
+            }
+        }
 
         public static string GetSqlCreationScript(this DbContext context)
         {
